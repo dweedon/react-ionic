@@ -1,12 +1,34 @@
 import React from 'react';
-import messages from './messages';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
-export default class HomePage extends React.Component {
+import { setBackdropVisibility } from 'containers/App/actions';
+
+export class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  static propTypes = {
+    activateBackdrop: React.PropTypes.func,
+  };
+
+  toggleBackdrop() {
+    this.props.activateBackdrop();
+  }
+
   render() {
     return (
-      <h1>
-        hellossss
-      </h1>
+      <button onClick={this.props.activateBackdrop} type="button">toggle me</button>
     );
   }
 }
+
+export function mapDispatchToProps(dispatch, ownProps) {
+  return {
+    activateBackdrop: () => {
+      return dispatch(setBackdropVisibility(true));
+    }
+  };
+}
+
+const mapStateToProps = createStructuredSelector({});
+
+// Wrap the component to inject dispatch and state into it
+export default connect(mapStateToProps, mapDispatchToProps)(App);

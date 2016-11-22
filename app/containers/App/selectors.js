@@ -1,4 +1,12 @@
-// selectLocationState expects a plain JS object for the routing state
+import { createSelector } from 'reselect';
+
+const selectGlobal = () => (state) => state.get('global');
+
+const selectBackdropVisibility = () => createSelector(
+  selectGlobal(),
+  (globalState) => globalState.get('backdropVisibility')
+);
+
 const selectLocationState = () => {
   let prevRoutingState;
   let prevRoutingStateJS;
@@ -16,5 +24,6 @@ const selectLocationState = () => {
 };
 
 export {
+  selectBackdropVisibility,
   selectLocationState,
 };

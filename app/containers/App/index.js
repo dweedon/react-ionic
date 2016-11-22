@@ -1,29 +1,43 @@
-/**
- *
- * App.react.js
- *
- * This component is the skeleton around the actual pages, and should only
- * contain code that should be seen on all pages. (e.g. navigation bar)
- *
- * NOTE: while this component should technically be a stateless functional
- * component (SFC), hot reloading does not currently support SFCs. If hot
- * reloading is not a necessity for you then you can refactor it and remove
- * the linting exception.
- */
-
 import React from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
-export default class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+import Backdrop from 'components/Backdrop';
+import { setBackdropVisibility } from './actions';
+import { selectBackdropVisibility } from './selectors';
 
+export class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     children: React.PropTypes.node,
+    toggleBackdrop: React.PropTypes.func,
+    backdropVisiblity: React.PropTypes.bool,
   };
+
+  toggleBackdrop() {
+    this.props.toggleBackdrop(!this.props.backdropVisiblity);
+  }
 
   render() {
     return (
       <div>
         {React.Children.toArray(this.props.children)}
+        <Backdrop visible={this.props.backdropVisiblity} onClick={() => { this.toggleBackdrop(); }} />
       </div>
     );
   }
 }
+
+export function mapDispatchToProps(dispatch, ownProps) {
+  return {
+    toggleBackdrop: (visibility) => {
+      return dispatch(setBackdropVisibility(visibility));
+    }
+  };
+}
+
+const mapStateToProps = createStructuredSelector({
+  backdropVisiblity: selectBackdropVisibility(),
+});
+
+// Wrap the component to inject dispatch and state into it
+export default connect(mapStateToProps, mapDispatchToProps)(App);

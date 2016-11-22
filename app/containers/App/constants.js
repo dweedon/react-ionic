@@ -10,3 +10,4 @@
  */
 
 export const DEFAULT_LOCALE = 'en';
+export const SET_BACKDROP_VISIBILITY = 'ionic/App/SET_BACKDROP_VISIBILITY'
